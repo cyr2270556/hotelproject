@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<script src="/static/js/jquery-1.11.3.js"></script>
+<body>
+{% csrf_token %}
+<script>
+    // $(function(){})包裹的ajax--页面元素全部加载完成过后使用
+    //直接用$.ajax({})必须拼接页面,此时页面数据动态加载可以在页面打开时就拿到数据
+    $(function(){
+        $("#btn").click(function(){
+            $.ajax({
+                url:"/sonapp/jsondatapost",
+                type:"POST",
+                //processData:false, 表单提交中使用表示不做预处理
+                //contentType:false, 表单提交中使用文件上传一定false
+                //data:formdata,同上 固定操作
+                //dataType:"json", 指定服务器返回给客户端的数据类型(可以不指定)
+                //data:stringify(数据),
+                contentType:"application/json", 给服务器是什么数据类型
+                data:{
+                    uname:$("#uname").val(),
+                    password:$("#password").val(),
+                    csrfmiddlewaretoken:$("[name='csrfmiddlewaretoken']").val(),
+                        },
+
+                success:function(res){
+                    alert(res)
+                }
+
+            })
+
+        })
+
+
+    })
+
+
+</script>
+<p>用户名:<input type="text" id="uname"></p>
+<p>密码:<input type="text" id="password"></p>
+<button id="btn">提交</button>
+
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>coross</title>
+</head>
+<script src="/static/js/jquery-1.11.3.js"></script>
+<body>
+
+<button id="btn">跨域请求</button>
+<script>
+   //预留函数
+   function print(data){
+        alert(data);
+   }
+
+
+
+    $(function(){
+/*这个方法不常用!!!
+        $("#btn").click(function(){
+            //拿到页面第一个元素
+            var body = document.getElementsByTagName("body")[0];
+            //创建一个script标签
+            var script = document.createElement("script");
+            script.type="text/javascript";
+            //print是预留函数标签
+            //这里的localhost跟127.0.0.1是 跨域发送请求
+            script.src="http://localhost:8000/sonapp/crosstestdata?callback=print";
+            body.append(script);
+
+        })
+*/
+
+/*
+        $("#btn").click(function(){
+            $.ajax({
+                url:"http://localhost:8000/sonapp/crosstestdata",
+                type:"get",
+                dataType:"jsonp",
+                jsonp:"callback",
+                jsonCallback:"print"
+            })
+
+        })
+    })
+*/
+
+//封装成匿名函数
+        $("#btn").click(function(){
+            $.ajax({
+                url:"http://localhost:8000/sonapp/crosstestdata",
+                type:"get",
+                dataType:"jsonp",
+                success:function(data){
+                    console.log(data);
+
+                }
+            })
+
+        })
+    })
+</script>
+
+</body>
+</html>

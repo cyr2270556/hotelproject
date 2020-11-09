@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="/static/js/jquery.min.js"></script>
+    <script>
+            var html_body = '';
+            var place = window.localStorage.getItem('hotel_place');
+            $.ajax({
+                url:"http://127.0.0.1:8000/v1/infos",
+                type:"GET",
+                beforeSend: function(request){
+                    if(place == null){
+                        window.localStorage.setItem("hotel_place","chengdu");
+                        request.setRequestHeader("Hotelplace","chengdu");
+                    }else{
+                        request.setRequestHeader("Hotelplace",place);
+                    }
+                    // "成都" 数据类型有问题 必须是英文
+                },
+                success:function(res){
+
+                    if(res.code==200){
+
+                    html_body += "<div>最热酒店";
+
+                    //放容器里面for循环
+                    for(i=0;i<5;i++){
+                    html_body += "<div id='all_" +i+"'><div>";
+                    html_body += res.data.allhotel[i].allhotelname;
+                    html_body += "</div>";
+
+                    html_body += "<div><img src='"+res.data.allhotel[i].allhotelimageoutside+" '></div>";
+
+                    html_body += "<div>";
+                    html_body += res.data.allhotel[i].allhotelhotpoint;
+                    html_body += "</div></div>";
+                }
+
+                    html_body +="</div>";
+
+                    html_body += "<div>地区最热酒店";
+
+                    for(i=0;i<res.data.placehotel.length && i<5;i++){
+                    html_body += "<div id='place_" +i+"'><div>";
+                    html_body += res.data.placehotel[i].parthotelname;
+                    html_body += "</div>";
+
+                    html_body += "<div> <img src='"+res.data.placehotel[i].parthotelimageoutside+"'></div>";
+
+                    html_body += "<div>";
+                    html_body += res.data.placehotel[i].parthotelhotpoint;
+                    html_body += "</div></div>";
+                    }
+                    html_body += "</div>"
+                    html_body +='<div>更换地区<select name="area" id="replace" size="1"><option value="成都" selected="selected">成都</option><option value="北京">北京</option></select></div><div><input type="button" id="palcebtn" value="查看" onclick="changePlace()"></div>';
+                    $('body').html(html_body);
+
+                    $('#all_0').on('click', function(){
+						var post_data = {'hotelname':res.data.allhotel[0].allhotelname,'hotpoint': 1}
+						var turnUrl =res.data.allhotel[0].allhotelname
+						$.ajax({
+						type:"post",
+						contentType:"application/json",
+						dataType:"json",
+						url:"http://127.0.0.1:8000/v1/infos",
+						data:JSON.stringify(post_data),
+						success:function(res){
+
+						    window.location.href="http://127.0.0.1:5000/"+turnUrl;
+						},
+						})
+						});
+
+					 $('#all_4').on('click', function(){
+						var post_data = {'hotelname':res.data.allhotel[4].allhotelname,'hotpoint': 1}
+						var turnUrl =res.data.allhotel[4].allhotelname
+						$.ajax({
+						type:"post",
+						contentType:"application/json",
+						dataType:"json",
+						url:"http://127.0.0.1:8000/v1/infos",
+						data:JSON.stringify(post_data),
+						success:function(res){
+						    window.location.href="http://127.0.0.1:5000/"+turnUrl;
+						},
+
+						})
+						});
+
+					  $('#all_1').on('click', function(){
+						var post_data = {'hotelname':res.data.allhotel[1].allhotelname,'hotpoint': 1}
+						var turnUrl =res.data.allhotel[1].allhotelname
+						$.ajax({
+						type:"post",
+						contentType:"application/json",
+						dataType:"json",
+						url:"http://127.0.0.1:8000/v1/infos",
+						data:JSON.stringify(post_data),
+						success:function(res){
+						    window.location.href="http://127.0.0.1:5000/"+turnUrl;
+						},
+						})
+						});
+
+					   $('#all_2').on('click', function(){
+						var post_data = {'hotelname':res.data.allhotel[2].allhotelname,'hotpoint': 1}
+						var turnUrl =res.data.allhotel[2].allhotelname
+						$.ajax({
+						type:"post",
+						contentType:"application/json",
+						dataType:"json",
+						url:"http://127.0.0.1:8000/v1/infos",
+						data:JSON.stringify(post_data),
+						success:function(res){
+						    window.location.href="http://127.0.0.1:5000/"+turnUrl;
+						},
+						})
+						});
+
+					   $('#all_3').on('click', function(){
+						var post_data = {'hotelname':res.data.allhotel[3].allhotelname,'hotpoint': 1}
+						var turnUrl =res.data.allhotel[3].allhotelname
+						$.ajax({
+						type:"post",
+						contentType:"application/json",
+						dataType:"json",
+						url:"http://127.0.0.1:8000/v1/infos",
+						data:JSON.stringify(post_data),
+						success:function(res){
+						    window.location.href="http://127.0.0.1:5000/"+turnUrl;
+						},
+						})
+						});
+
+					  $('#place_0').on('click', function(){
+						var post_data = {'hotelname':res.data.placehotel[0].parthotelname,'hotpoint': 1}
+                        var turnUrl =res.data.placehotel[0].parthotelname
+						$.ajax({
+						type:"post",
+						contentType:"application/json",
+						dataType:"json",
+						url:"http://127.0.0.1:8000/v1/infos",
+						data:JSON.stringify(post_data),
+						success:function(res){
+						    window.location.href="http://127.0.0.1:5000/"+turnUrl;
+						},
+						})
+						});
+
+					  $('#place_1').on('click', function(){
+						var post_data = {'hotelname':res.data.placehotel[1].parthotelname,'hotpoint': 1}
+						 var turnUrl =res.data.placehotel[1].parthotelname
+						$.ajax({
+						type:"post",
+						contentType:"application/json",
+						dataType:"json",
+						url:"http://127.0.0.1:8000/v1/infos",
+						data:JSON.stringify(post_data),
+						success:function(res){
+						    window.location.href="http://127.0.0.1:5000/"+turnUrl;
+						},
+						})
+						});
+
+					  $('#place_2').on('click', function(){
+						var post_data = {'hotelname':res.data.placehotel[2].parthotelname,'hotpoint': 1}
+						var turnUrl =res.data.placehotel[2].parthotelname
+						$.ajax({
+						type:"post",
+						contentType:"application/json",
+						dataType:"json",
+						url:"http://127.0.0.1:8000/v1/infos",
+						data:JSON.stringify(post_data),
+						success:function(res){
+						    window.location.href="http://127.0.0.1:5000/"+turnUrl;
+						},
+						})
+						});
+
+						$('#place_3').on('click', function(){
+						var post_data = {'hotelname':res.data.placehotel[3].parthotelname,'hotpoint': 1}
+						var turnUrl =res.data.placehotel[3].parthotelname
+						$.ajax({
+						type:"post",
+						contentType:"application/json",
+						dataType:"json",
+						url:"http://127.0.0.1:8000/v1/infos",
+						data:JSON.stringify(post_data),
+						success:function(res){
+						    window.location.href="http://127.0.0.1:5000/"+turnUrl;
+						},
+						})
+						});
+
+						$('#place_4').on('click', function(){
+						var post_data = {'hotelname':res.data.placehotel[4].parthotelname,'hotpoint': 1}
+						var turnUrl =res.data.placehotel[4].parthotelname
+						$.ajax({
+						type:"post",
+						contentType:"application/json",
+						dataType:"json",
+						url:"http://127.0.0.1:8000/v1/infos",
+						data:JSON.stringify(post_data),
+						success:function(res){
+						    window.location.href="http://127.0.0.1:5000/"+turnUrl;
+						},
+						})
+						});
+
+                    }else{
+                        alert(res.data);
+                    }
+
+                }
+            });
+
+            function changePlace(){
+                var place_change = $("#replace option:checked").val();
+                if(place_change=="北京"){
+                    window.localStorage.setItem('hotel_place',"beijing");
+                };
+                if(place_change=="成都"){
+                    window.localStorage.setItem('hotel_place',"chengdu");
+                };
+                window.location.reload();
+            }
+
+
+    </script>
+</head>
+<body>
+</body>
+</html>

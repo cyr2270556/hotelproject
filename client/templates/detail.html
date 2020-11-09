@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="/static/js/jquery.min.js" type="text/javascript"></script>
+    <script>
+            var html_body = '';
+            var url = document.location.toString();
+            var query_split = url.split('/');
+            var hotelname = query_split[4];
+            var roomnumber = query_split[5];
+                    function rand(min,max) {
+             return Math.floor(Math.random()*(max-min))+min;
+        }
+
+        //模拟数据 向后端传订单id
+        var random_id = rand(1000,9999)
+        var order_id = "2019111821315602" + random_id.toString()
+	post_data = {"order_id": order_id}
+        console.log(post_data)
+            $.ajax({
+                url:"http://127.0.0.1:8000/v1/order",
+                type:"GET",
+                beforeSend:function(request){
+                    request.setRequestHeader("Hotelname",hotelname);
+                    request.setRequestHeader("Roomnumber",roomnumber);
+                },
+                success:function(res){
+                    if(res.code==200){
+                        html_body += "<div>房间号:"+roomnumber +"</div>";
+                        html_body += "<div><img src='http://127.0.0.1:5000/"+ res.data.img+"'></div>";
+                        html_body += "<div>房间价格:"+res.data.price +"</div>";
+                        html_body += "<div><input type='button' id='btn' value='预定'></div>";
+                        html_body +="<div><input type='button' id='Btn_pay' value='支付'></div>";
+
+                        $("body").html(html_body);
+                        $('#btn').click(function(){
+                        token = window.localStorage.getItem('hotel_token');
+						var post_data = {"hotelname":hotelname,"hotpoint": 1,
+						"roomnumber":roomnumber,"order_id":order_id}
+						    console.log(post_data)
+                            $.ajax({
+                            type:"POST",
+                            contentType:"application/json",
+                            dataType:"json",
+                            url:"http://127.0.0.1:8000/v1/order",
+                            data:JSON.stringify(post_data),
+                            beforeSend: function(request) {
+                request.setRequestHeader("Authorization", token);
+
+            },
+                            success:function(res){
+                                    if(res.code==200){
+                                        alert(res.data);
+                                    }else{
+                                        alert(res.data);
+                                    }
+                                    }
+                            })
+                    })
+
+
+        $(function(){
+            $("#Btn_pay").click(function () {
+                $.ajax({
+                    url:"http://127.0.0.1:8000/payment/jump/",
+                    type:"post",
+		    contentType: "application/json",
+                    dataType:"json",
+		    data: JSON.stringify(post_data),
+                    success:function (data) {
+                        window.location = data.pay_url
+                    },
+                    error:function(errors){
+                        console.log("错误")
+                        console.log(errors)
+                    }
+                })
+            })
+        })
+
+
+
+
+
+
+
+
+
+                    }else{
+                        alert(res.data);
+                    }
+                }
+            })
+
+
+
+        </script>
+</head>
+<body>
+
+</body>
+</html>

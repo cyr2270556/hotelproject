@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<script src="/static/js/jquery-1.11.3.js"></script>
+<body>
+<button id="btn">ajax test</button>
+<div id="show"></div>
+<!--每一个$对应一个})  success对应一个}-->
+<script>
+$(function(){
+    $("#btn").click(function(){
+        $.ajax({
+            url:"/sonapp/ajaxdata",
+            type:"GET",
+            success:function(res){
+                $("#show").html(res);
+
+            }
+        })
+    })
+})
+</script>
+
+</body>
+</html>
